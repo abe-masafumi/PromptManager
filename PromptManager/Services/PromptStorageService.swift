@@ -15,7 +15,11 @@ class PromptStorageService {
     private init() {
         let documentDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let appDirectory = documentDirectory.appendingPathComponent("PromptManager")
-        try? FileManager.default.createDirectory(at: appDirectory, withIntermediateDirectories: true)
+        do {
+            try FileManager.default.createDirectory(at: appDirectory, withIntermediateDirectories: true)
+        } catch {
+            print("ディレクトリ作成に失敗しました: \(error.localizedDescription)")
+        }
         fileURL = appDirectory.appendingPathComponent("prompts.json")
     }
 
@@ -27,5 +31,9 @@ class PromptStorageService {
     func savePrompts(_ prompts: [PromptItem]) {
         let data = try? JSONEncoder().encode(prompts)
         try? data?.write(to: fileURL)
+    }
+
+    func deleteStorage() {
+        try? FileManager.default.removeItem(at: fileURL)
     }
 }

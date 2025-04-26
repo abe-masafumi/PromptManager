@@ -23,6 +23,7 @@ struct PromptRegisterView: View {
             TextEditor(text: $content)
                 .frame(height: 150)
             Button("保存") {
+                guard !name.isEmpty, !tag.isEmpty, !content.isEmpty else { return }
                 let newPrompt = PromptItem(name: name, tag: tag, content: content)
                 viewModel.add(prompt: newPrompt)
                 presentationMode.wrappedValue.dismiss()

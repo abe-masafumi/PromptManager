@@ -9,9 +9,11 @@
 import Foundation
 import AppKit
 
-
 class PromptListViewModel: ObservableObject {
     @Published var prompts: [PromptItem] = []
+    @Published var selectedTag: String? = nil
+    @Published var searchText: String = ""
+
 
     init() {
         load()
@@ -35,5 +37,28 @@ class PromptListViewModel: ObservableObject {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(content, forType: .string)
+    }
+
+    var filteredPrompts: [PromptItem] {
+        var results = prompts
+        if let tag = selectedTag {
+            results = results.filter { $0.tag == tag }
+        }
+        if !searchText.isEmpty {
+            results = results.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText) ||
+                $0.tag.localizedCaseInsensitiveContains(searchText) ||
+                $0.content.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+        return results
+    }
+
+    var allTags: [String] {
+        Array(Set(prompts.map { $0.tag })).sorted()
+    }
+
+    func selectTag(_ tag: String?) {
+        selectedTag = tag
     }
 }
