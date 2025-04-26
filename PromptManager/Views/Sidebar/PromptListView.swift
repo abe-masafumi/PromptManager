@@ -114,52 +114,84 @@ struct TagButton: View {
     }
 }
 
+// PromptCardView修正
 struct PromptCardView: View {
     var prompt: PromptItem
     var onEdit: () -> Void
 
     @State private var expanded: Bool = false
+    @State private var isCopied: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                if !prompt.tag.isEmpty {
-                    Text("#\(prompt.tag)")
+        ZStack(alignment: .topTrailing) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    if !prompt.tag.isEmpty {
+                        Text("#\(prompt.tag)")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                    Button("編集", action: onEdit)
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.blue)
+                        .buttonStyle(PlainButtonStyle())
                 }
-                Spacer()
-                Button("編集", action: onEdit)
+                Text(prompt.name)
+                    .font(.headline)
+                    .bold()
+                Text(prompt.content)
+                    .font(.body)
+                    .lineLimit(expanded ? nil : 3)
+                    .foregroundColor(.primary)
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
+
+                if prompt.content.count > 100 {
+                    Button(expanded ? "折りたたむ" : "続きを読む") {
+                        withAnimation {
+                            expanded.toggle()
+                        }
+                    }
                     .font(.caption)
                     .foregroundColor(.blue)
-                    .buttonStyle(PlainButtonStyle())
+                }
             }
-            Text(prompt.name)
-                .font(.headline)
-                .bold()
-            Text(prompt.content)
-                .font(.body)
-                .lineLimit(expanded ? nil : 3)
-                .foregroundColor(.primary)
-
-            if prompt.content.count > 100 {
-                Button(expanded ? "折りたたむ" : "続きを読む") {
+            .padding()
+            .background(Color(white: 0.2))
+            .cornerRadius(16)
+            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .onTapGesture {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(prompt.content, forType: .string)
+                withAnimation {
+                    isCopied = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     withAnimation {
-                        expanded.toggle()
+                        isCopied = false
                     }
                 }
-                .font(.caption)
-                .foregroundColor(.blue)
+            }
+
+            if isCopied {
+                Text("Copied!")
+                    .font(.caption)
+                    .padding(6)
+                    .background(Color.green.opacity(0.8))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .padding([.top, .trailing], 10)
+                    .transition(.scale)
             }
         }
-        .padding()
-        .background(Color(white: 0.2))
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
-        .padding(.horizontal)
-        .padding(.vertical, 8)
     }
 }
+
 
 #Preview {
     PromptListView(viewModel: PromptListViewModel())

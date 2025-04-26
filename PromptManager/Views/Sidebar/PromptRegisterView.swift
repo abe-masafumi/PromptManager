@@ -26,13 +26,28 @@ struct PromptRegisterView: View {
         _content = State(initialValue: editingPrompt?.content ?? "")
     }
 
-
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(editingPrompt == nil ? "新しいプロンプトを追加" : "プロンプトを編集")
-                .font(.title2)
-                .fontWeight(.bold)
-                .padding(.bottom, 10)
+            HStack {
+                Text(editingPrompt == nil ? "新しいプロンプトを追加" : "プロンプトを編集")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+                if editingPrompt != nil {
+                    Button(action: {
+                        if let editingPrompt = editingPrompt,
+                           let index = viewModel.prompts.firstIndex(where: { $0.id == editingPrompt.id }) {
+                            viewModel.delete(at: IndexSet(integer: index))
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }) {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding(.bottom, 10)
 
             Group {
                 TextField("名前", text: $name)
