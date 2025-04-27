@@ -9,7 +9,9 @@
 import SwiftUI
 
 struct MenuBarExtraView: View {
+    @StateObject private var viewModel = PromptListViewModel() // ViewModelをここで管理
+    
     var body: some View {
-        PromptListView()
+        PromptListView(viewModel: viewModel) // viewModelを渡す
     }
 }
