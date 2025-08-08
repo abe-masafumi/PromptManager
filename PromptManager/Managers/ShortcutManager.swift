@@ -43,7 +43,7 @@ class ShortcutManager {
             let key = UInt16(event.getIntegerValueField(.keyboardEventKeycode))
             let flags = event.flags
 
-            if key == UInt16(kVK_ANSI_D) && flags.contains(.maskControl) {
+            if key == UInt16(kVK_ANSI_P) && flags.contains(.maskControl) {
                 globalAction?() // ✅ グローバル変数に保存したアクションを実行
                 return nil
             }
