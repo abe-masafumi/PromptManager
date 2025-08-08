@@ -15,6 +15,13 @@ class ShortcutManager {
     private static var globalAction: (() -> Void)? // ✅ グローバル変数でアクションを保持
 
     func registerShortcut(action: @escaping () -> Void) {
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        if osVersion.majorVersion == 15 && osVersion.minorVersion == 4 {
+            print("⚠️ macOS 15.4の既知の問題: グローバルショートカットが正常に動作しない場合があります。")
+            print("📋 Apple公式情報: macOS 15.5で修正済み (https://developer.apple.com/forums/thread/780929)")
+            print("💡 解決方法: macOS 15.5以降にアップデートしてください。")
+        }
+        
         if !AXIsProcessTrusted() {
             print("⚠️ アクセシビリティ権限が必要です。システム環境設定 > セキュリティとプライバシー > プライバシー > アクセシビリティでPromptManagerを許可してください。")
             
