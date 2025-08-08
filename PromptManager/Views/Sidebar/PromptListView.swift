@@ -55,9 +55,6 @@ struct PromptListView: View {
                                 showingRegister = true
                             }
                         )
-                        .onTapGesture {
-                            viewModel.copyToClipboard(prompt.content)
-                        }
                     }
                 }
             }
@@ -140,23 +137,47 @@ struct PromptCardView: View {
                 Text(prompt.name)
                     .font(.headline)
                     .bold()
-                Text(prompt.content)
-                    .font(.body)
-                    .lineLimit(expanded ? nil : 3)
-                    .foregroundColor(.primary)
-                    .padding(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-
-                if prompt.content.count > 100 {
-                    Button(expanded ? "折りたたむ" : "続きを読む") {
-                        withAnimation {
-                            expanded.toggle()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    TextEditor(text: .constant(prompt.content))
+                        .font(.body)
+                        .foregroundColor(.primary)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(minHeight: expanded ? nil : 60, maxHeight: expanded ? nil : 60)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                        .scrollContentBackground(.hidden)
+                    
+                    HStack {
+                        if prompt.content.count > 100 {
+                            Button(expanded ? "折りたたむ" : "続きを読む") {
+                                withAnimation {
+                                    expanded.toggle()
+                                }
+                            }
+                            .font(.caption)
+                            .foregroundColor(.blue)
                         }
+                        
+                        Spacer()
+                        
+                        Button("コピー") {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(prompt.content, forType: .string)
+                            withAnimation {
+                                isCopied = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                withAnimation {
+                                    isCopied = false
+                                }
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundColor(.blue)
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .font(.caption)
-                    .foregroundColor(.blue)
                 }
             }
             .padding()
@@ -165,18 +186,6 @@ struct PromptCardView: View {
             .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
             .padding(.horizontal)
             .padding(.vertical, 8)
-            .onTapGesture {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(prompt.content, forType: .string)
-                withAnimation {
-                    isCopied = true
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    withAnimation {
-                        isCopied = false
-                    }
-                }
-            }
 
             if isCopied {
                 Text("Copied!")
