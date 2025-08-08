@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4414080B2E465788001AA8EC /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4414080A2E465784001AA8EC /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		7FC220AD2DBCA28B00F2C4AE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4414080A2E465784001AA8EC /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7FC2209B2DBCA28A00F2C4AE /* PromptManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PromptManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC220AC2DBCA28B00F2C4AE /* PromptManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromptManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC220B62DBCA28B00F2C4AE /* PromptManagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromptManagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +80,7 @@
 		7FC220922DBCA28A00F2C4AE = {
 			isa = PBXGroup;
 			children = (
+				4414080A2E465784001AA8EC /* .gitignore */,
 				7FC2209D2DBCA28A00F2C4AE /* PromptManager */,
 				7FC220AF2DBCA28B00F2C4AE /* PromptManagerTests */,
 				7FC220B92DBCA28B00F2C4AE /* PromptManagerUITests */,
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4414080B2E465788001AA8EC /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
