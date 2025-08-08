@@ -15,9 +15,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
+        
         ShortcutManager.shared.registerShortcut {
             self.togglePromptWindow()
         }
+        
+        print("✅ PromptManager起動完了")
+        print("📋 グローバルショートカット: Ctrl+;")
+        print("📋 メニューバーからもアクセス可能です")
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
