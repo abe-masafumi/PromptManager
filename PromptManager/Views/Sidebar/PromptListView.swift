@@ -162,7 +162,7 @@ struct PromptCardView: View {
                         
                         Spacer()
                         
-                        Button("📋 コピー") {
+                        Button("コピー") {
                             NSPasteboard.general.clearContents()
                             NSPasteboard.general.setString(prompt.content, forType: .string)
                             withAnimation {
