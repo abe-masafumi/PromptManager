@@ -15,6 +15,13 @@ class ShortcutManager {
     private static var globalAction: (() -> Void)? // ✅ グローバル変数でアクションを保持
 
     func registerShortcut(action: @escaping () -> Void) {
+        if !AXIsProcessTrusted() {
+            print("⚠️ アクセシビリティ権限が必要です。システム環境設定 > セキュリティとプライバシー > プライバシー > アクセシビリティでPromptManagerを許可してください。")
+            
+            let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
+            AXIsProcessTrustedWithOptions(options as CFDictionary)
+            return
+        }
 
         let eventMask = (1 << CGEventType.keyDown.rawValue)
 
