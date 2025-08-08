@@ -7,10 +7,16 @@
 
 import SwiftUI
 
+struct EditablePrompt: Identifiable {
+    let id = UUID()
+    let prompt: PromptItem?
+    
+    static let newPrompt = EditablePrompt(prompt: nil)
+}
+
 struct PromptListView: View {
     @StateObject var viewModel: PromptListViewModel
-    @State private var showingRegister = false
-    @State private var editingPrompt: PromptItem? = nil
+    @State private var editingItem: EditablePrompt? = nil
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -18,8 +24,7 @@ struct PromptListView: View {
             NewPromptCreateCardView(title: "＋ 新規プロンプトを追加")
                 .padding(.bottom, 5)
                 .onTapGesture {
-                    editingPrompt = nil
-                    showingRegister = true
+                    editingItem = EditablePrompt.newPrompt
                 }
 
             Text("prompt : [\(viewModel.prompts.count)件]")
@@ -51,8 +56,7 @@ struct PromptListView: View {
                         PromptCardView(
                             prompt: prompt,
                             onEdit: {
-                                editingPrompt = prompt
-                                showingRegister = true
+                                editingItem = EditablePrompt(prompt: prompt)
                             }
                         )
                     }
@@ -62,8 +66,8 @@ struct PromptListView: View {
         }
         .padding(.vertical, 40)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .sheet(isPresented: $showingRegister) {
-            PromptRegisterView(viewModel: viewModel, editingPrompt: editingPrompt)
+        .sheet(item: $editingItem) { item in
+            PromptRegisterView(viewModel: viewModel, editingPrompt: item.prompt)
         }
     }
 }

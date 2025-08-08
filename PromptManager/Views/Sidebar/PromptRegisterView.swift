@@ -106,12 +106,5 @@ struct PromptRegisterView: View {
         )
         .padding()
         .frame(width: 400)
-        .onAppear {
-            if let editingPrompt = editingPrompt {
-                name = editingPrompt.name
-                tag = editingPrompt.tag
-                content = editingPrompt.content
-            }
-        }
     }
 }
